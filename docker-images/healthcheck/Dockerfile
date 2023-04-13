@@ -1,7 +1,7 @@
 FROM ubuntu:22.10
 
 RUN apt update &&\
-    apt install -y --no-install-recommends python3 python3-pip &&\
+    apt install -y --no-install-recommends python3 python3-pip libcapstone-dev &&\
     rm -rf /var/lib/apt/lists/*
 
 RUN /usr/sbin/useradd --no-create-home -u 1337 user
