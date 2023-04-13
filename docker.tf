@@ -4,7 +4,7 @@ resource "docker_image" "healthcheck_base" {
   name = "healthcheck-base-image"
   platform = "linux/amd64"
   build {
-    path      = local.healthcheck_image_path
+    context      = local.healthcheck_image_path
     tag = ["healthcheck_base:latest"]
   }
 }
@@ -14,7 +14,7 @@ resource "docker_image" "challenge_base" {
   name = "challenge-base-image"
   platform = "linux/amd64"
   build {
-    path = var.challenge_path
+    context = var.challenge_path
     tag  = [local.base_image_name]
   }
 }
@@ -24,7 +24,7 @@ resource "docker_image" "nsjail" {
   name = "nsjail-image"
   platform = "linux/amd64"
   build {
-    path      = local.nsjail_image_path
+    context      = local.nsjail_image_path
     build_arg = {
       NSJAIL_RELEASE = "3.1"
     }
@@ -38,7 +38,7 @@ resource "docker_image" "chal" {
   name       = "challenge-jailed-image"
   platform = "linux/amd64"
   build {
-    path      = local.jail_image_path
+    context      = local.jail_image_path
     build_arg = {
       CHALLENGE_IMAGE = local.base_image_name
       MEM_LIMIT       = var.memory_limit * 1024 * 1024 // config is in MB, cgroups expects bytes...
@@ -56,7 +56,7 @@ resource "docker_image" "healthcheck" {
   name = "healthcheck-image"
   platform = "linux/amd64"
   build {
-    path      = var.challenge_path
+    context      = var.challenge_path
     dockerfile = "${local.healthcheck_image_path}/Dockerfile_deploy"
     build_arg = {
       ADDITIONAL_REQUIREMENTS = var.healthcheck_additional_requirements
