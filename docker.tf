@@ -2,6 +2,7 @@
 # build the healthcheck base
 resource "docker_image" "healthcheck_base" {
   name = "healthcheck-base-image"
+  platform = "linux/amd64"
   build {
     path      = local.healthcheck_image_path
     tag = ["healthcheck_base:latest"]
@@ -11,6 +12,7 @@ resource "docker_image" "healthcheck_base" {
 # build the base challenge image
 resource "docker_image" "challenge_base" {
   name = "challenge-base-image"
+  platform = "linux/amd64"
   build {
     path = var.challenge_path
     tag  = [local.base_image_name]
@@ -20,6 +22,7 @@ resource "docker_image" "challenge_base" {
 # generate a chal / jail base image that will be cached and reused between the modules
 resource "docker_image" "nsjail" {
   name = "nsjail-image"
+  platform = "linux/amd64"
   build {
     path      = local.nsjail_image_path
     build_arg = {
@@ -33,6 +36,7 @@ resource "docker_image" "nsjail" {
 resource "docker_image" "chal" {
   depends_on = [docker_image.nsjail, docker_image.challenge_base]
   name       = "challenge-jailed-image"
+  platform = "linux/amd64"
   build {
     path      = local.jail_image_path
     build_arg = {
@@ -50,6 +54,7 @@ resource "docker_image" "healthcheck" {
   count = var.healthcheck ? 1 : 0
   depends_on = [docker_image.healthcheck_base]
   name = "healthcheck-image"
+  platform = "linux/amd64"
   build {
     path      = var.challenge_path
     dockerfile = "${local.healthcheck_image_path}/Dockerfile_deploy"
