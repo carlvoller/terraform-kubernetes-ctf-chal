@@ -11,7 +11,7 @@ resource "kubernetes_deployment" "challenge_deployment" {
   ]
   metadata {
     name      = "${var.name}-deploy"
-    namespace = kubernetes_namespace.challenge_ns.metadata[0].name
+    namespace = data.kubernetes_namespace.challenge_ns.metadata[0].name
     labels    = {
       app = var.name
     }
@@ -104,7 +104,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "challenge_autoscaler" {
   depends_on = [kubernetes_deployment.challenge_deployment]
   metadata {
     name      = "${var.name}-autoscaler"
-    namespace = kubernetes_namespace.challenge_ns.metadata[0].name
+    namespace = data.kubernetes_namespace.challenge_ns.metadata[0].name
   }
   spec {
     target_cpu_utilization_percentage = var.target_utilization
@@ -121,7 +121,7 @@ resource "kubernetes_service" "challenge_service" {
   depends_on = [kubernetes_deployment.challenge_deployment, docker_image.chal]
   metadata {
     name      = "${var.name}-service"
-    namespace = kubernetes_namespace.challenge_ns.metadata[0].name
+    namespace = data.kubernetes_namespace.challenge_ns.metadata[0].name
     labels    = {
       app = var.name
     }
