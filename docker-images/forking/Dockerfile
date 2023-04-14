@@ -17,13 +17,13 @@ COPY --from=nsjail:latest \
 
 # future path for a new proc to mount into the user namespace later
 RUN mkdir -p /.jailproc/proc
-RUN chmod 0700 /.jailproc
+RUN chmod 0755 /.jailproc
 
 # copy the challenge over as a chroot environment
 COPY --from=chal / /chroot
 
 # copy over the config and entrypoint
-COPY nsjail.cfg entrypoint.sh /home/user/
+COPY --chmod=777 nsjail.cfg entrypoint.sh /home/user/
 # set nsjail limits according to build args
 RUN printf '\n%s' \
     "cgroup_mem_max: $MEM_LIMIT" \
