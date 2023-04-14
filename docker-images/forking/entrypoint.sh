@@ -8,7 +8,7 @@
 # * The return value of a pipeline is the status of the last command that had a non-zero status upon exit.
 set -o xtrace -o nounset -o errexit	-o errtrace -o pipefail
 # mount the userspace proc
-mount -t proc none /.jailproc/proc
+# mount -t proc none /.jailproc/proc
 
 # do not allow the child process to inherit any privileges and set uid and gid
 # also, use socat to spin up a new, isolated nsjail for each incoming TCP connection
