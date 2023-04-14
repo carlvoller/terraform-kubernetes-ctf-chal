@@ -1,5 +1,5 @@
 # lets create a namespace for our ctf challenges
-resource "kubernetes_namespace" "challenge_ns" {
+data "kubernetes_namespace" "challenge_ns" {
   metadata {
     name = "ctf-chals"
   }
