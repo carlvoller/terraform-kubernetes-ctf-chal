@@ -25,7 +25,7 @@ resource "docker_image" "nsjail" {
   build {
     context      = local.nsjail_image_path
     platform = "linux/amd64"
-    build_arg = {
+    build_args = {
       NSJAIL_RELEASE = "3.1"
     }
     tag = ["nsjail:latest"]
@@ -39,7 +39,7 @@ resource "docker_image" "chal" {
   build {
     context      = local.jail_image_path
     platform = "linux/amd64"
-    build_arg = {
+    build_args = {
       CHALLENGE_IMAGE = local.base_image_name
       MEM_LIMIT       = var.memory_limit * 1024 * 1024 // config is in MB, cgroups expects bytes...
       CPU_LIMIT       = local.time_limit
@@ -58,7 +58,7 @@ resource "docker_image" "healthcheck" {
     context      = var.challenge_path
     dockerfile = "${local.healthcheck_image_path}/Dockerfile_deploy"
     platform = "linux/amd64"
-    build_arg = {
+    build_args = {
       ADDITIONAL_REQUIREMENTS = var.healthcheck_additional_requirements
     }
     tag = ["${var.name}_healthcheck:latest", local.published_healthcheck_image_name]
